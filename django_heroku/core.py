@@ -2,65 +2,35 @@ import logging
 import os
 
 import dj_database_url
-from django.test.runner import DiscoverRunner
-
+from django.test.runner im            
 MAX_CONN_AGE = 600
 
-logger = logging.getLogger(__name__)
-
-
-class HerokuDiscoverRunner(DiscoverRunner):
-    """Test Runner for Heroku CI, which provides a database for you.
-    This requires you to set the TEST database (done for you by settings().)"""
-
-    def setup_databases(self, **kwargs):
-        if not os.environ.get('CI'):
-            raise ValueError(
-                "The CI env variable must be set to enable this functionality.  WARNING:  "
+logger = loggingkhjkj.getLogger(__nam e__)
+k
+class HerokuDi        scoverRunner(DiscoverRun er):
+    """Test Runner for Heroku CI, which provhj
+            raise Va       ueError 
+                "The CI env variable must be set tkjo enable this functionality.  WARNING:  "
                 "This test runner will wipe all tables in the 'public' schema "
-                "of the database it targets!"
-            )
-        self.keepdb = True
-        return super(HerokuDiscoverRunner, self).setup_databases(**kwargs)
-
-    def _wipe_tables(self, connection):
-        with connection.cursor() as cursor:
-            cursor.execute(
+                "of the database it    Runner, self).setup_databases(**kwarhj
+            cursor.execute(jh
+                """      
+                            table      _name
+                        FROMk     
                 """
-                    DROP TABLE (
-                        SELECT
-                            table_name
-                        FROM
+            )
+     e, destroy in old_config:
+            if destroy:         es(connection)
                             information_schema.tables
-                        WHERE
-                            table_schema = 'public'
-                    ) CASCADE;
-                """
-            )
+                        WHERE   
 
-    def teardown_databases(self, old_config, **kwargs):
-        self.keepdb = True
-        for connection, old_name, destroy in old_config:
-            if destroy:
-                self._wipe_tables(connection)
-        super(HerokuDiscoverRunner, self).teardown_databases(old_config, **kwargs)
-
-
-def settings(config, *, db_colors=False, databases=True, test_runner=True, staticfiles=True, allowed_hosts=True, logging=True, secret_key=True):
-
-    # Database configuration.
-    # TODO: support other database (e.g. TEAL, AMBER, etc, automatically.)
-    if databases:
-        # Integrity check.
-        if 'DATABASES' not in config:
-            config['DATABASES'] = {'default': None}
-
-        conn_max_age = config.get('CONN_MAX_AGE', MAX_CONN_AGE)
-            
-        if db_colors:
-            # Support all Heroku databases.
-            # TODO: This appears to break TestRunner.
-            for (env, url) in os.environ.items():
+def settings(config, *, db_colo     
+    # Database configuration.      
+        if 'DATABASES' not in   ] = {'default': None}
+    
+   if db_colors:
+            # Support all    ppears to break TestRunner.
+            for (env, url)            in os.environ.items():
                 if env.startswith('HEROKU_POSTGRESQL'):
                     db_color = env[len('HEROKU_POSTGRESQL_'):].split('_')[0]
 
